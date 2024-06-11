@@ -1,9 +1,18 @@
 <template>
   <h1 class="text-center">Ciao</h1>
   <i class="fa fa-solid fa-home"></i>
+  
   <ul>
-    <li v-for="project in projects" :key="project.id">{{ project.title }}</li>
+    <li v-for="(item, index) in menuItems" :key="index">
+      <router-link :to="{name: item.routeName}" class="nav-link">
+        {{ item.label }}
+      </router-link>
+    </li>
   </ul>
+
+  <main class="container">
+    <router-view></router-view>
+  </main>
 </template>
 
 <script>
@@ -13,21 +22,23 @@ import axios from 'axios';
     name: 'App',
     data(){
       return{
-        store,
-        projects: []
+        menuItems: [
+          {
+            label: 'Home',
+            routeName: 'home'
+          },
+          {
+            label: 'Projects',
+            routeName: 'projects'
+          },
+          {
+            label: 'Type',
+            routeName: 'types'
+          }
+        ]
       }
-    },
-    methods: {
-      getAllProjects(){
-        axios.get(this.store.apiBaseUrl + '/projects').then((res) =>{
-          console.log(res.data);
-          this.projects = res.data.results;
-        });
-      }
-    },
-    mounted(){
-      this.getAllProjects();
     }
+    
   }
 </script>
 
