@@ -31,10 +31,10 @@ import axios from 'axios';
             label: 'Projects',
             routeName: 'projects'
           },
-          {
+          /*{
             label: 'Type',
             routeName: 'types'
-          }
+          }*/
         ]
       }
     }
