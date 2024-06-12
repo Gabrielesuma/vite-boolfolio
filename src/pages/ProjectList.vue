@@ -1,17 +1,21 @@
 <template>
-    <ul>
-        <li v-for="project in projects" :key="project.id">{{ project.title }}
-            <div>{{ project.type?.name }}</div>
-            <router-link :to="{name: 'single-project', params: {'slug': project.slug}}">Leggi articolo</router-link>
-        </li>
-    </ul>
+    <h1>All Projects</h1>
+    <div class="row">
+        <div class="col-12 col-lg-6" v-for="project in projects" :key="project.id">
+            <CardComponent :item="project"/>
+        </div>
+    </div>
 </template>
 
 <script>
 import { store } from '../store';
 import axios from 'axios';
+import CardComponent from '../components/CardComponent.vue';
 export default {
     name: 'ProjectList',
+    components: {
+        CardComponent
+    },
     data() {
         return {
             store,
