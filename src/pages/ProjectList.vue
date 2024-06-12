@@ -1,5 +1,13 @@
 <template>
-    <h1>All Projects</h1>
+    <div class="d-flex justify-content-between">
+        <h1>All Projects</h1>
+        <select name="types" id="types">
+            <option value="">Tutti i tipi</option>
+            <option value="type.id" v-for="type in store.types" :key="type.id">
+                {{type.name}}
+            </option>
+        </select>
+    </div>
     <div class="row">
         <div class="col-12 col-lg-6" v-for="project in projects" :key="project.id">
             <CardComponent :item="project"/>

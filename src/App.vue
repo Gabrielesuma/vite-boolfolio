@@ -17,8 +17,19 @@ import axios from 'axios';
     },
     data(){
       return{
-        
+        store
       }
+    },
+    methods: {
+      getTypes(){
+        axios.get(this.store.apiBaseUrl + '/types').then((res) => {
+          console.log(res.data);
+          this.store.types = res.data;
+        });
+      }
+    },
+    mounted(){
+      this.getTypes();
     }
     
   }
