@@ -24,7 +24,7 @@ import axios from 'axios';
       getTypes(){
         axios.get(this.store.apiBaseUrl + '/types').then((res) => {
           console.log(res.data);
-          this.store.types = res.data;
+          this.store.types = res.data.results;
         });
       }
     },
