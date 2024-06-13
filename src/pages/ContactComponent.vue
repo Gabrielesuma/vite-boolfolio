@@ -1,18 +1,30 @@
 <template>
     <h1>Contact Us</h1>
+    <div v-if="success" class="alert alert-success text-start" role="alert">
+        Messaggio inviato con successo!
+    </div>
     <div class="row">
         <form @submit.prevent="sendForm()" class="col-12 text-start">
             <div class="mb-3">
-                <input type="text" class="form-control border-0 border-bottom" placeholder="Name" v-model="name">
+                <input type="text" class="form-control border-0 border-bottom" :class="{ 'is-invalid': errors.name }" placeholder="Name" v-model="name" required>
+                <p v-for="(error, index) in errors.name" :key="`message-error-${index}`" class="invalid-feedback">
+                    {{ error }}
+                </p>
             </div>
             <div class="mb-3">
-                <input type="email" class="form-control border-0 border-bottom" placeholder="Email" v-model="email">
+                <input type="email" class="form-control border-0 border-bottom" :class="{ 'is-invalid': errors.address }" placeholder="Email" v-model="email" required>
+                <p v-for="(error, index) in errors.address" :key="`message-error-${index}`" class="invalid-feedback">
+                    {{ error }}
+                </p>
             </div>
             <div class="mb-3">
                 <label for="message">Your message</label>
-                <textarea id="message" class="form-control border-0 border-bottom" cols="30" rows="10" v-model="message">{{ message }}</textarea>
+                <textarea id="message" class="form-control border-0 border-bottom" :class="{ 'is-invalid': errors.message }" cols="30" rows="10" v-model="message" required>{{ message }}</textarea>
+                <p v-for="(error, index) in errors.message" :key="`message-error-${index}`" class="invalid-feedback">
+                    {{ error }}
+                </p>
             </div>
-            <button class="btn btn-lg btn-primary text-white" type="submit">Send</button>
+            <button class="btn btn-lg btn-primary text-white" type="submit" :disabled="loading">{{ loading ? 'Sending...' : 'Send' }}</button>
         </form>
     </div>
 </template>
@@ -27,11 +39,17 @@ import axios from 'axios';
                 store,
                 name: '',
                 email: '',
-                message: ''
+                message: '',
+                errors: {},
+                loading: false,
+                success: false
             }
         },
         methods: {
             sendForm(){
+                this.success = false;
+                this.loading = true;
+                this.errors = {};
                 const data = {
                     name: this.name,
                     address: this.email,
@@ -39,10 +57,17 @@ import axios from 'axios';
                 }
                 axios.post(`${this.store.apiBaseUrl}/contacts`, data).then((res)=>{
                     console.log(res.data);
+                    this.success = true;
+                    this.name = '';
+                    this.email = '';
+                    this.message = '';
                 }).catch((error)=>{
-
+                    //console.log(error);
+                    //console.log(error.response.data);
+                    this.errors = error.response.data.errors;
+                    console.log(this.errors);
                 }).finally(()=>{
-
+                    this.loading = false;
                 })
             }
         }
